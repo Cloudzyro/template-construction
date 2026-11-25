@@ -1,0 +1,95 @@
+---
+// Accessible before/after comparison: a range input moves the divider.
+// Works with arrow keys, and shows the "after" view in full without JavaScript.
+import ProjectArt from "./ProjectArt.astro";
+import type { Project } from "../data/site";
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+---
+
+<figure class="ba" data-ba>
+  <div class="frame" style="--pos: 50%">
+    <div class="layer"><ProjectArt kind={project.kind} state="after" label={`After: ${project.after}`} /></div>
+    <div class="layer before"><ProjectArt kind={project.kind} state="before" label={`Before: ${project.before}`} /></div>
+    <div class="divider" aria-hidden="true"></div>
+    <span class="tag tag-b" aria-hidden="true">Before</span>
+    <span class="tag tag-a" aria-hidden="true">After</span>
+  </div>
+  <label class="control">
+    <span class="visually-hidden">Compare before and after</span>
+    <input type="range" min="0" max="100" value="50" aria-valuetext="Showing half before, half after" />
+  </label>
+  <figcaption class="meta">Drag the slider or use the arrow keys to compare. Illustrations stand in for your own photos.</figcaption>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-ba]").forEach((el) => {
+    const frame = el.querySelector<HTMLElement>(".frame")!;
+    const input = el.querySelector<HTMLInputElement>("input")!;
+    const update = () => {
+      const v = Number(input.value);
+      frame.style.setProperty("--pos", `${v}%`);
+      input.setAttribute("aria-valuetext", `${v}% before, ${100 - v}% after`);
+    };
+    input.addEventListener("input", update);
+    update();
+  });
+</script>
+
+<style>
+  .ba {
+    margin: 0;
+  }
+  .frame {
+    position: relative;
+    aspect-ratio: 8 / 5;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--raised);
+  }
+  .layer {
+    position: absolute;
+    inset: 0;
+  }
+  .before {
+    clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+  }
+  .divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--pos);
+    width: 2px;
+    margin-left: -1px;
+    background: var(--yellow);
+  }
+  .tag {
+    position: absolute;
+    top: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(27, 31, 34, 0.82);
+    color: #eceef0;
+    font-size: 0.8125rem;
+  }
+  .tag-b {
+    left: 12px;
+  }
+  .tag-a {
+    right: 12px;
+  }
+  .control {
+    display: block;
+    margin-top: 12px;
+  }
+  input[type="range"] {
+    width: 100%;
+    accent-color: #1d2124;
+    min-height: 32px;
+  }
+  figcaption {
+    margin-top: 4px;
+  }
+</style>

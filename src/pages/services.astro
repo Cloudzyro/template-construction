@@ -1,0 +1,80 @@
+---
+import Base from "../layouts/Base.astro";
+import { services } from "../data/site";
+---
+
+<Base title="Services" description="Kitchen and bath remodels, additions, custom homes, basements, decks and porches.">
+  <header class="page-head dark">
+    <div class="wrap">
+      <h1>Services</h1>
+      <p class="dim">{services.length} kinds of work</p>
+      <p class="lede">Every project gets the same crew, the same fixed-price estimate and the same two-year workmanship warranty. Typical lengths and price ranges below are for planning only.</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="wrap">
+      {
+        services.map((s) => (
+          <article id={s.slug}>
+            <div>
+              <h2>{s.name}</h2>
+              <p class="lede">{s.summary}</p>
+              <p class="meta">Typical: {s.typical}</p>
+            </div>
+            <ul>{s.scope.map((x) => <li>{x}</li>)}</ul>
+          </article>
+        ))
+      }
+      <p class="end"><a class="btn btn-primary" href="/quote">Request a quote</a></p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  article {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: clamp(24px, 5vw, 80px);
+    padding-block: 40px;
+    border-top: 1px solid var(--line-strong);
+    scroll-margin-top: 24px;
+  }
+  article:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+  h2 {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+  }
+  .meta {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    padding: 12px 0 12px 24px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 22px;
+    width: 12px;
+    height: 1px;
+    background: var(--ink-2);
+  }
+  .end {
+    margin-top: 40px;
+  }
+  @media (max-width: 760px) {
+    article {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

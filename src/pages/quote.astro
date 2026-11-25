@@ -1,0 +1,89 @@
+---
+import Base from "../layouts/Base.astro";
+import Form from "../components/Form.astro";
+import { site, quoteForm, process } from "../data/site";
+---
+
+<Base title="Request a quote" description="Tell us about your project and we'll set up a free site visit.">
+  <header class="page-head dark">
+    <div class="wrap">
+      <h1>Request a quote</h1>
+      <p class="dim">Free site visit</p>
+      <p class="lede">A few details now saves a phone call later. We reply within two business days to set up a visit.</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="wrap grid">
+      <Form subject={`Quote request for ${site.name}`} button="Send request" success="Thanks. We'll call within two business days to set up a site visit.">
+        <div class="field-row">
+          <label class="field"><span>Your name</span><input name="name" autocomplete="name" required /></label>
+          <label class="field"><span>Phone</span><input name="phone" type="tel" autocomplete="tel" required /></label>
+        </div>
+        <div class="field-row">
+          <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required /></label>
+          <label class="field"><span>Project address or town</span><input name="address" autocomplete="street-address" /></label>
+        </div>
+        <div class="field-row">
+          <label class="field">
+            <span>Project type</span>
+            <select name="project_type">{quoteForm.projectTypes.map((o) => <option>{o}</option>)}</select>
+          </label>
+          <label class="field">
+            <span>Budget range</span>
+            <select name="budget">{quoteForm.budgets.map((o) => <option>{o}</option>)}</select>
+          </label>
+          <label class="field">
+            <span>When to start</span>
+            <select name="timeline">{quoteForm.timelines.map((o) => <option>{o}</option>)}</select>
+          </label>
+        </div>
+        <label class="field"><span>Tell us about the project <small>(rooms, sizes, what bothers you now)</small></span><textarea name="description" rows="6" required></textarea></label>
+      </Form>
+      <aside>
+        <h2>What happens next</h2>
+        <ol>
+          {process.slice(0, 3).map((s) => <li><strong>{s.title}</strong><span>{s.text}</span></li>)}
+        </ol>
+        <p class="meta">Rather talk? Call <a href={`tel:${site.phone.replace(/[^\d+]/g, "")}`}>{site.phone}</a>, {site.hours.toLowerCase()}.</p>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+  aside {
+    padding: 24px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+  h2 {
+    font-size: 1.75rem;
+  }
+  ol {
+    margin: 0 0 16px;
+    padding: 0 0 0 20px;
+  }
+  li {
+    margin-bottom: 16px;
+  }
+  li strong {
+    display: block;
+    font-weight: 500;
+  }
+  li span {
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+  }
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

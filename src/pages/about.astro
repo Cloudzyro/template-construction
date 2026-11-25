@@ -1,0 +1,94 @@
+---
+import Base from "../layouts/Base.astro";
+import { site, about, licensing, process } from "../data/site";
+---
+
+<Base title="About" description={`${site.name}: who we are, licensing, insurance and our warranty.`}>
+  <header class="page-head dark">
+    <div class="wrap">
+      <h1>{about.title}</h1>
+      <p class="dim">Since 2009</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="wrap grid">
+      <div class="prose">
+        {about.paragraphs.map((p) => <p>{p}</p>)}
+        <h2>The people you'll meet</h2>
+        <ul class="people">
+          {about.people.map((m) => <li><span>{m.name}</span><span class="meta">{m.role}</span></li>)}
+        </ul>
+      </div>
+      <aside>
+        <h2>Licensing, insurance and warranty</h2>
+        <dl>
+          {licensing.items.map((l) => <div><dt>{l.label}</dt><dd>{l.value}</dd></div>)}
+        </dl>
+        <p class="meta">{licensing.note}</p>
+        <h2 class="h2b">Our warranty</h2>
+        <p>Two years on our workmanship, in writing, plus the manufacturers' warranties on everything we install. If something we built isn't right, call {site.phone} and your project lead comes back out.</p>
+        <p class="meta">{process.length} steps from first call to keys: see the <a href="/#main">home page</a>.</p>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 96px);
+  }
+  .prose {
+    font-size: 1.125rem;
+    color: var(--ink-2);
+  }
+  h2 {
+    font-size: 1.75rem;
+    color: var(--ink);
+    margin-top: 8px;
+  }
+  .prose h2 {
+    margin-top: 40px;
+  }
+  .h2b {
+    margin-top: 40px;
+  }
+  .people {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .people li {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-block: 12px;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+  }
+  .people .meta {
+    margin: 0;
+  }
+  dl {
+    margin: 0 0 12px;
+  }
+  dl div {
+    padding-block: 12px;
+    border-top: 1px solid var(--line);
+  }
+  dt {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+  dd {
+    margin: 0;
+    font-weight: 500;
+  }
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

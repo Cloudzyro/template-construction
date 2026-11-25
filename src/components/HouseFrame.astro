@@ -1,0 +1,54 @@
+---
+// Hero drawing: a timber house frame drawn as hairlines, like a framing plan.
+// One header beam carries the accent color.
+const studsLower = Array.from({ length: 23 }, (_, i) => 120 + i * 24);
+const studsUpper = Array.from({ length: 15 }, (_, i) => 168 + i * 24);
+const rafters = Array.from({ length: 9 }, (_, i) => i);
+---
+
+<svg viewBox="80 40 700 520" role="img" aria-label="Line drawing of a two-story timber house frame with studs, floor joists and roof rafters, marked with dimension lines">
+  <g stroke="#a9b0b6" stroke-width="1" fill="none" opacity="0.9">
+    <!-- foundation -->
+    <rect x="104" y="452" width="560" height="28" stroke-opacity="0.7"></rect>
+    <!-- lower wall plates -->
+    <line x1="112" y1="448" x2="656" y2="448"></line>
+    <line x1="112" y1="300" x2="656" y2="300"></line>
+    <line x1="112" y1="294" x2="656" y2="294"></line>
+    {studsLower.map((x) => <line x1={x} y1="300" x2={x} y2="448" stroke-opacity="0.55"></line>)}
+    <!-- floor deck -->
+    <rect x="112" y="282" width="544" height="12" stroke-opacity="0.8"></rect>
+    <!-- upper walls -->
+    <line x1="160" y1="282" x2="608" y2="282"></line>
+    <line x1="160" y1="170" x2="608" y2="170"></line>
+    {studsUpper.map((x) => <line x1={x} y1="170" x2={x} y2="282" stroke-opacity="0.55"></line>)}
+    <!-- roof -->
+    <line x1="128" y1="176" x2="384" y2="56"></line>
+    <line x1="640" y1="176" x2="384" y2="56"></line>
+    {rafters.map((i) => <line x1={170 + i * 26} y1={170 - i * 12.2} x2={170 + i * 26} y2="170" stroke-opacity="0.4"></line>)}
+    {rafters.map((i) => <line x1={598 - i * 26} y1={170 - i * 12.2} x2={598 - i * 26} y2="170" stroke-opacity="0.4"></line>)}
+    <line x1="160" y1="170" x2="608" y2="170"></line>
+    <!-- window and door openings -->
+    <rect x="200" y="330" width="72" height="72" fill="#1b1f22"></rect>
+    <rect x="456" y="330" width="72" height="72" fill="#1b1f22"></rect>
+    <rect x="352" y="344" width="56" height="104" fill="#1b1f22"></rect>
+    <rect x="232" y="200" width="64" height="56" fill="#1b1f22"></rect>
+    <rect x="472" y="200" width="64" height="56" fill="#1b1f22"></rect>
+    <!-- braces -->
+    <line x1="120" y1="440" x2="190" y2="308" stroke-opacity="0.6"></line>
+    <line x1="648" y1="440" x2="578" y2="308" stroke-opacity="0.6"></line>
+  </g>
+  <!-- the one bright element: the header over the wide opening -->
+  <rect x="344" y="330" width="72" height="10" fill="#f2b705"></rect>
+  <!-- dimension lines -->
+  <g stroke="#6d757c" stroke-width="1" fill="#a9b0b6" font-family="Barlow, sans-serif" font-size="17">
+    <line x1="104" y1="512" x2="664" y2="512"></line>
+    <line x1="104" y1="504" x2="104" y2="520"></line>
+    <line x1="664" y1="504" x2="664" y2="520"></line>
+    <text x="384" y="536" text-anchor="middle" stroke="none">36' 0"</text>
+    <line x1="704" y1="56" x2="704" y2="480"></line>
+    <line x1="696" y1="56" x2="712" y2="56"></line>
+    <line x1="696" y1="480" x2="712" y2="480"></line>
+    <text x="716" y="272" stroke="none">27' 6"</text>
+    <text x="380" y="322" text-anchor="middle" stroke="none" fill="#d6dade">2x12 header</text>
+  </g>
+</svg>

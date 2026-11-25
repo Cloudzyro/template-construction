@@ -1,0 +1,381 @@
+---
+import Base from "../layouts/Base.astro";
+import HouseFrame from "../components/HouseFrame.astro";
+import ProjectArt from "../components/ProjectArt.astro";
+import { site, home, services, projects, process, areas, licensing } from "../data/site";
+const featured = projects.slice(0, 3);
+---
+
+<Base>
+  <section class="hero dark">
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <p class="where">General contractor in {site.address.city}, {site.address.region}</p>
+        <h1>{home.heroTitle}</h1>
+        <p class="lede">{home.heroText}</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="/quote">Request a quote</a>
+          <a class="btn btn-line" href="/projects">See our projects</a>
+        </div>
+      </div>
+      <div class="hero-art"><HouseFrame /></div>
+    </div>
+    <div class="wrap stats">
+      {home.stats.map((s) => (
+        <div>
+          <p class="num">{s.value}</p>
+          <p class="lbl">{s.label}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>What we build</h2>
+      <p class="dim">{services.length} services</p>
+      <ul class="svc">
+        {services.map((s) => (
+          <li>
+            <h3><a href={`/services#${s.slug}`}>{s.name}</a></h3>
+            <p>{s.summary}</p>
+            <p class="meta">{s.typical}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section projects">
+    <div class="wrap">
+      <div class="head-row">
+        <div>
+          <h2>Recent projects</h2>
+          <p class="dim">{projects.length} projects</p>
+        </div>
+        <a class="btn btn-line" href="/projects">All projects</a>
+      </div>
+      <div class="pgrid">
+        {featured.map((p, i) => (
+          <a class:list={["pcard", { wide: i === 0 }]} href={`/projects/${p.slug}`}>
+            <div class="pimg"><ProjectArt kind={p.kind} state="after" label={`After: ${p.after}`} /></div>
+            <div class="pbody">
+              <h3>{p.title}</h3>
+              <p class="meta">{p.town}, {p.year} &middot; {p.duration}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section dark">
+    <div class="wrap">
+      <h2>How a project runs</h2>
+      <p class="dim">{process.length} steps</p>
+      <ol class="steps">
+        {process.map((s, i) => (
+          <li>
+            <span class="n">{i + 1}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div>
+        <h2>Where we work</h2>
+        <p class="dim">{areas.towns.length} towns</p>
+        <p class="lede">{areas.intro}</p>
+        <ul class="towns">{areas.towns.map((t) => <li>{t.name}</li>)}</ul>
+        <a href="/areas">Service areas in detail</a>
+      </div>
+      <div class="lic">
+        <h2>Licensed and insured</h2>
+        <p class="dim">In writing</p>
+        <dl>
+          {licensing.items.map((l) => (
+            <div><dt>{l.label}</dt><dd>{l.value}</dd></div>
+          ))}
+        </dl>
+        <p class="meta">{licensing.note}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-band dark">
+    <div class="wrap cta-row">
+      <div>
+        <h2>{home.ctaTitle}</h2>
+        <p class="lede">{home.ctaText}</p>
+      </div>
+      <div class="cta">
+        <a class="btn btn-primary" href="/quote">Request a quote</a>
+        <a class="btn btn-line" href={`tel:${site.phone.replace(/[^\d+]/g, "")}`}>Call {site.phone}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-block: clamp(48px, 7vw, 88px) 0;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(24px, 4vw, 64px);
+    align-items: center;
+  }
+  .where {
+    color: var(--on-night-2);
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    max-width: 15ch;
+  }
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: clamp(40px, 6vw, 64px);
+    border-top: 1px solid var(--night-line);
+  }
+  .stats div {
+    padding: 24px 24px 32px 0;
+  }
+  .stats div + div {
+    padding-left: 24px;
+    border-left: 1px solid var(--night-line);
+  }
+  .num {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  .lbl {
+    color: var(--on-night-2);
+    margin: 0;
+  }
+  .svc {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--line-strong);
+  }
+  .svc li {
+    padding: 24px 24px 24px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .svc li:not(:nth-child(3n + 1)) {
+    padding-left: 24px;
+    border-left: 1px solid var(--line);
+  }
+  .svc h3 a {
+    text-decoration: none;
+  }
+  .svc h3 a:hover {
+    text-decoration: underline;
+  }
+  .svc p:not(.meta) {
+    color: var(--ink-2);
+  }
+  .svc .meta {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .projects {
+    background: var(--card);
+    border-block: 1px solid var(--line);
+  }
+  .head-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .pgrid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 24px;
+  }
+  .pcard {
+    display: grid;
+    text-decoration: none;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--page);
+    border: 1px solid var(--line);
+    transition: border-color 160ms var(--ease);
+  }
+  .pcard:hover {
+    border-color: var(--line-strong);
+  }
+  .pcard:hover h3 {
+    text-decoration: underline;
+  }
+  .wide {
+    grid-row: span 2;
+  }
+  .pimg {
+    aspect-ratio: 8 / 5;
+  }
+  .wide .pimg {
+    aspect-ratio: auto;
+    min-height: 320px;
+  }
+  .pbody {
+    padding: 16px 20px 20px;
+  }
+  .pbody h3 {
+    margin-bottom: 4px;
+  }
+  .pbody .meta {
+    margin: 0;
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--night-line);
+  }
+  .steps li {
+    padding: 24px 20px 0 0;
+  }
+  .steps li + li {
+    padding-left: 20px;
+    border-left: 1px solid var(--night-line);
+  }
+  .n {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--yellow);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .steps p {
+    color: var(--on-night-2);
+    font-size: 0.9375rem;
+  }
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(40px, 6vw, 96px);
+  }
+  .towns {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    columns: 2;
+    column-gap: 24px;
+  }
+  .towns li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+    break-inside: avoid;
+  }
+  .lic dl {
+    margin: 0 0 16px;
+  }
+  .lic dl div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding-block: 12px;
+    border-top: 1px solid var(--line);
+  }
+  .lic dt {
+    color: var(--ink-2);
+  }
+  .lic dd {
+    margin: 0;
+    font-weight: 500;
+  }
+  .cta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .cta-row .cta {
+    margin: 0;
+  }
+  @media (max-width: 1000px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+    .steps li,
+    .steps li + li {
+      padding: 20px 0;
+      border-left: 0;
+      border-bottom: 1px solid var(--night-line);
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      column-gap: 16px;
+    }
+    .steps .n {
+      grid-row: span 2;
+    }
+    .svc {
+      grid-template-columns: 1fr 1fr;
+    }
+    .svc li,
+    .svc li:not(:nth-child(3n + 1)) {
+      padding: 24px 24px 24px 0;
+      border-left: 0;
+    }
+  }
+  @media (max-width: 860px) {
+    .hero-grid,
+    .split,
+    .pgrid {
+      grid-template-columns: 1fr;
+    }
+    .wide {
+      grid-row: auto;
+    }
+    .wide .pimg {
+      aspect-ratio: 8 / 5;
+      min-height: 0;
+    }
+  }
+  @media (max-width: 600px) {
+    .svc {
+      grid-template-columns: 1fr;
+    }
+    .stats {
+      grid-template-columns: 1fr;
+    }
+    .stats div,
+    .stats div + div {
+      padding: 16px 0;
+      border-left: 0;
+      border-bottom: 1px solid var(--night-line);
+    }
+    .lic dl div {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+</style>

@@ -1,0 +1,104 @@
+---
+import Base from "../layouts/Base.astro";
+import { site, areas } from "../data/site";
+// Rough positions for the simple area map, in a 600 x 440 box with the shop in the middle.
+const pos: Record<string, [number, number]> = {
+  "Cedar Falls": [300, 220],
+  Waterloo: [372, 244],
+  Hudson: [330, 300],
+  Evansdale: [410, 268],
+  Janesville: [290, 130],
+  Denver: [380, 120],
+  Dike: [196, 252],
+  Waverly: [330, 70],
+  "La Porte City": [470, 338],
+  Reinbeck: [110, 330],
+};
+---
+
+<Base title="Service areas" description={`Towns we build in around ${site.address.city}, ${site.address.region}.`}>
+  <header class="page-head dark">
+    <div class="wrap">
+      <h1>Service areas</h1>
+      <p class="dim">About 30 miles from the shop</p>
+      <p class="lede">{areas.intro}</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="wrap grid">
+      <figure>
+        <svg viewBox="0 0 600 440" role="img" aria-label={`Simple map of the towns we serve around ${site.address.city}, with a 30 mile ring around the shop`}>
+          <rect width="600" height="440" rx="12" fill="#f8f7f5"></rect>
+          <path d="M0 300 C120 270 200 320 300 280 C400 240 470 290 600 250" stroke="#b7c6cc" stroke-width="10" fill="none"></path>
+          <path d="M60 0 L140 440 M0 180 L600 160 M460 0 L420 440" stroke="rgba(29,33,36,0.1)" stroke-width="2"></path>
+          <circle cx="300" cy="220" r="200" fill="none" stroke="#1d2124" stroke-dasharray="4 6" stroke-opacity="0.45"></circle>
+          {
+            areas.towns.map((t) => {
+              const [x, y] = pos[t.name] ?? [300, 220];
+              const home = t.name === site.address.city;
+              return (
+                <g>
+                  {home ? <rect x={x - 8} y={y - 8} width="16" height="16" fill="#f2b705" stroke="#1d2124"></rect> : <circle cx={x} cy={y} r="5" fill="#1d2124"></circle>}
+                  <text x={x + 12} y={y + 5} font-size="14" fill="#1d2124" font-family="Barlow, sans-serif">{t.name}</text>
+                </g>
+              );
+            })
+          }
+          <text x="300" y="36" text-anchor="middle" font-size="12" fill="#676e74" font-family="Barlow, sans-serif">30 mi</text>
+        </svg>
+        <figcaption class="meta">Not to scale. The square is our shop.</figcaption>
+      </figure>
+      <div>
+        <h2>Towns we serve</h2>
+        <ul>
+          {areas.towns.map((t) => (
+            <li><span>{t.name}</span>{t.note && <span class="meta">{t.note}</span>}</li>
+          ))}
+        </ul>
+        <p>Don't see your town? <a href="/quote">Ask anyway</a>; for additions and new homes we often travel farther.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+  figure {
+    margin: 0;
+  }
+  svg {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+  figcaption {
+    margin-top: 8px;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  ul {
+    list-style: none;
+    margin: 0 0 24px;
+    padding: 0;
+  }
+  li {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  li .meta {
+    margin: 0;
+  }
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
